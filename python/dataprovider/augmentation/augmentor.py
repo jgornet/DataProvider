@@ -30,6 +30,7 @@ class DataAugment(object):
 
     def factory(aug_type, **kwargs):
         """Factory method for data augmentation classes."""
+        if aug_type is 'occlusion':  return Occlude(**kwargs)
         if aug_type is 'box':       return BoxOcclusion(**kwargs)
         if aug_type is 'blur':      return Blur(**kwargs)
         if aug_type is 'flip':      return Flip(**kwargs)
@@ -37,6 +38,11 @@ class DataAugment(object):
         if aug_type is 'misalign':  return Misalign(**kwargs)
         if aug_type is 'missing':   return MissingSection(**kwargs)
         if aug_type is 'greyscale': return Greyscale(**kwargs)
+        if aug_type is 'brightness': return Brightness(**kwargs)
+        if aug_type is 'duplicate': return Duplicate(**kwargs)
+        if aug_type is 'crop': return Crop(**kwargs)
+        if aug_type is 'stitch': return Stitch(**kwargs)
+        if aug_type is 'drop': return Drop(**kwargs)
         assert False, "Unknown data augmentation type: [%s]" % aug_type
 
     factory = staticmethod(factory)
@@ -97,3 +103,10 @@ from warp import Warp
 from misalign import Misalign
 from missing_section import MissingSection
 from greyscale import Greyscale
+from gaussian import Gaussian
+from occlusion import Occlude
+from brightness import Brightness
+from duplicate import Duplicate
+from crop import Crop
+from stitch import Stitch
+from drop import Drop

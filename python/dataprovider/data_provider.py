@@ -100,7 +100,9 @@ class VolumeDataProvider(DataProvider):
                 spec = dataset.get_spec()
                 spec = self.augment.prepare(spec, **params)
                 sample = getattr(dataset, mode+'_sample')(spec=spec)
-                break
+                if np.mean(sample["soma_label"]) > 0:
+                    break
+                continue
             except:
                 pass
         # Preprocessing.
@@ -108,6 +110,8 @@ class VolumeDataProvider(DataProvider):
         # Apply data augmentation.
         sample = self.augment(sample, **params)
         # Postprocessing.
+        sample["input"] = sample["input"][:20, :128, :128]
+        sample["soma_label"] = sample["soma_label"][:20, :128, :128]
         sample = self.postprocess(sample, **params)
         # Ensure that sample is ordered by key.
         return OrderedDict(sorted(sample.items(), key=lambda x: x[0]))
